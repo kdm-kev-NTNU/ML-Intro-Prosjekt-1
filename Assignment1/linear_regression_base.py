@@ -41,13 +41,19 @@ class LinearRegression():
         for _ in range(self.epochs): #Epochs: antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter
             lin_model = np.matmul(self.weights, x.transpose()) + self.bias # her brukes det tranpose slik at matrimultiplikasjonen skal være på riktig form (m x n) * (n x p)
             y_pred = self.sigmoid_function(lin_model) #her begrenses de verdiene som lin modellen kan lage, mellom [0, 1] slik at det 
+            grad_w, grad_b = self.compute_gradients(x, y, y_pred)
+            self.update_parameters(grad_w, grad_b)
+
+            loss = self._compute_loss(y, y_pred)  #her regnes ut loss - f.eks. via cross-entropi loss
+            pred_to_class = [1 if _y > 0.5 else 0 for _y in y_pred] #her er klassifiseringsterskelen 0.5 er den større en det blir det 1 ellers 0. 
+            self.train_accuracies.append(accuracy(y, pred_to_class))
+            self.losses.append(loss)
 
 
 
         # TODO: Implement
         raise NotImplementedError("The fit method is not implemented yet.")
-    
-    def predict(self, X):
+
         """
         Generates predictions
         
@@ -59,10 +65,10 @@ class LinearRegression():
             
         Returns:
             A length m array of floats
-        """
-        # TODO: Implement
-        raise NotImplementedError("The predict method is not implemented yet.")
+        """ 
+    def predict(self, X):
 
+        
 
 
 
