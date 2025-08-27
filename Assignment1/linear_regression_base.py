@@ -14,8 +14,41 @@ class LinearRegression():
     def sigmoid_function(self, x):
         return 1 / (1 + np.exp(-x))
 
+
+    #Regner ut loss for alle datapunktene og så finner den gjennomsnittet av det
+
+    """
+    y       = [1, 0, 1]
+    y_pred  = [0.9, 0.3, 0.2]   # sannsynligheter fra sigmoid
+
+    """
     def _compute_loss(self, y, y_pred):
-        pass
+        # Vi setter en veldig liten verdi 'eps' for å unngå log(0),
+        # som ellers ville gitt -inf og ødelagt beregningene
+        eps = 1e-12                      
+        
+        # Sørg for at sannsynlighetene y_pred aldri blir nøyaktig 0 eller 1.
+        # np.clip setter en nedre grense på eps og en øvre grense på 1 - eps.
+        y_pred = np.clip(y_pred, eps, 1 - eps)
+        
+        # Antall datapunkter (m = number of samples)
+        m = y.shape[0]
+        
+        # Binær kryssentropi / negativ log-likelihood:
+        # Formelen er:
+        # L = -1/m * Σ [ y_i * log(y_pred_i) + (1 - y_i) * log(1 - y_pred_i) ]
+        # alt etter sigma = formel 2 i word, mens alt i alt = formel 3 i word. 
+        # (-1/m ) - gjør det slik at man finner det for gjennomsnittet av alle datapunkter
+        #
+        # Intuisjon:
+        #  - Når y=1 → bidraget blir -log(y_pred)
+        #  - Når y=0 → bidraget blir -log(1 - y_pred)
+        # Dette straffer modellen når sannsynligheten for riktig klasse er lav.
+        return - (1.0 / m) * (
+            np.sum(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred))
+        )
+        
+
 
     def compute_gradients(self, x, y, y_pred):
         pass
@@ -42,12 +75,15 @@ class LinearRegression():
         #men fordi vi initialiserer alt i fit. så starter det som 0. 
         # Hvor X er featurene. og y er targeten
 
+
+        #Her så er gradient bergning før loss, fordi man har allerede formelen på forhånd, men matematisk så utledes gradienter basert på tapsfunksjonen. 
+        
         # Gradient Descent
         for _ in range(self.epochs): #Epochs: antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter
             lin_model = np.matmul(self.weights, X.transpose()) + self.bias # her brukes det tranpose slik at matrimultiplikasjonen skal være på riktig form (m x n) * (n x p)
             #Det er også her hvor lin.reg blir implementert
             y_pred = self.sigmoid_function(lin_model) #her forvandles de verdiene som lin modellen kan lage, mellom [0, 1] slik at det samsvar med binærklassifisering
-            grad_w, grad_b = self.compute_gradients(X, y, y_pred)
+            grad_w, grad_b = self.compute_gradients(X, y, y_pred)  #Her regner man ut gradienter. 
             self.update_parameters(grad_w, grad_b)
 
             loss = self._compute_loss(y, y_pred)  #her regnes ut loss - f.eks. via cross-entropi loss
