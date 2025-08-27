@@ -61,4 +61,15 @@ Her
 
 """
 
+#Etter en oppdatering
+grad_w = np.array([0.1, -0.2, 0.05])
+grad_b = -0.1
+learning_rate = 0.1
+
+weights = weights - learning_rate * grad_w
+bias = bias - learning_rate * grad_b
+
+print(weights)  # [-0.01  0.02 -0.005]
+print(bias)     # 0.01
+
 
