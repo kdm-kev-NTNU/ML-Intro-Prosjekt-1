@@ -50,11 +50,33 @@ class LinearRegression():
         
 
 
-    def compute_gradients(self, x, y, y_pred):
-        pass
+    def compute_gradients(self, X, y, y_pred):
+        """
+        Regner ut gradientene (hvor mye vi skal justere vekter og bias).
+        X: (m, n) matrise med datapunkter
+        y: (m,)   sanne labels (0 eller 1)
+        y_pred:   sannsynligheter fra sigmoid
+
+        Formelen er basert på utledningen av loss:
+          grad_w = (1/m) * X^T · (y_pred - y)
+          grad_b = (1/m) * sum(y_pred - y)
+        """
+        m = X.shape[0]                  # antall datapunkter
+        error = y_pred - y              # forskjellen mellom prediksjon og fasit
+
+        grad_w = (X.T @ error) / m      # gradient for vekter
+        grad_b = np.sum(error) / m      # gradient for bias
+        return grad_w, grad_b
+    
 
     def update_parameters(self, grad_w, grad_b):
-        pass
+        """
+        Oppdaterer vekter og bias med gradient descent.
+        Vi flytter oss "motsatt" av gradienten for å minske loss.
+        """
+        self.weights -= self.learning_rate * grad_w
+        self.bias    -= self.learning_rate * grad_b
+
 
     def accuracy(self, true_values, predictions):
         return np.mean(true_values == predictions)
@@ -77,7 +99,7 @@ class LinearRegression():
 
 
         #Her så er gradient bergning før loss, fordi man har allerede formelen på forhånd, men matematisk så utledes gradienter basert på tapsfunksjonen. 
-        
+
         # Gradient Descent
         for _ in range(self.epochs): #Epochs: antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter
             lin_model = np.matmul(self.weights, X.transpose()) + self.bias # her brukes det tranpose slik at matrimultiplikasjonen skal være på riktig form (m x n) * (n x p)
