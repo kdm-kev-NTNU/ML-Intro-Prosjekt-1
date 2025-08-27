@@ -17,3 +17,48 @@ b = np.array([4, 5, 6])
 
 result = np.matmul(a, b)
 print(result)  # 32 -- 1*4 + 2*5 + 3*6 = 32
+
+
+
+#np.zeros
+
+# np.zeros(n) lager en vetkor med n nuller
+# X.shape[1] = antall kolonner
+
+"""
+X = np.array([
+    [1.0, 2.0, 3.0],
+    [4.0, 5.0, 6.0],
+    [7.0, 8.0, 9.0],
+    [10.0, 11.0, 12.0]
+])
+
+"""
+
+# Her kommer det et eksempel på disse prinsippene i bruk
+
+# 4 samples, 3 features
+X = np.array([
+    [1.0, 2.0, 3.0],
+    [4.0, 5.0, 6.0],
+    [7.0, 8.0, 9.0],
+    [10.0, 11.0, 12.0]
+])
+
+y = np.array([0, 1, 0, 1])  # labels
+
+#Initiering av weights og bias
+weights = np.zeros(X.shape[1])  # -> [0. 0. 0.]
+bias = 0.0
+
+"""
+
+Her
+- X.shape[1] = 3 - features
+- Weights representerer hvor mye hver feature skal telle med i modellen
+- bias er startpunktet intercept
+
+
+"""
+
+
