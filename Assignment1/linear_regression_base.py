@@ -67,6 +67,7 @@ class LinearRegression():
             A length m array of floats
         """ 
     def predict(self, X):
+        lin_model = np.matmul(x, self.weights)
 
         
 
