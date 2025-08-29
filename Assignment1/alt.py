@@ -102,9 +102,10 @@ class LinearRegression():
 
         # Gradient Descent
         for _ in range(self.epochs): #Epochs: antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter
-            lin_model = np.matmul(self.weights, X.transpose()) + self.bias # her brukes det tranpose slik at matrimultiplikasjonen skal være på riktig form (m x n) * (n x p)
+            # FIKSET: Riktig rekkefølge for matrise-multiplikasjon
+            linear_output = X @ self.weights + self.bias  # Endret fra np.matmul(self.weights, X.transpose())
             #Det er også her hvor lin.reg blir implementert
-            y_pred = self.sigmoid_function(lin_model) #her forvandles de verdiene som lin modellen kan lage, mellom [0, 1] slik at det samsvar med binærklassifisering
+            y_pred = self.sigmoid_function(linear_output) #her forvandles de verdiene som lin modellen kan lage, mellom [0, 1] slik at det samsvar med binærklassifisering
             grad_w, grad_b = self.compute_gradients(X, y, y_pred)  #Her regner man ut gradienter. 
             self.update_parameters(grad_w, grad_b)
 
@@ -128,8 +129,8 @@ class LinearRegression():
             A length m array of floats
         """ 
     def predict(self, X):
-        lin_model = np.matmul(X, self.weights) + self.bias
-        y_pred = self.sigmoid_function(lin_model)
+        linear_output = X @ self.weights + self.bias  # Endret fra np.matmul(X, self.weights)
+        y_pred = self.sigmoid_function(linear_output)
         return [1 if _y > 0.5 else 0 for _y in y_pred]
 
         
